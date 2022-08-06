@@ -1,111 +1,51 @@
-import React, { useState, useEffect } from 'react'
-
-const Header = () => {
-  return (
-    <h1>Give Feedback</h1>
-  )
-}
-
-const RatingButton = ({onClick, text}) => {
-  return <button onClick={onClick}>{text}</button>
-}
-
-const StatisticsLine = ({text, value}) => {
-  return <tr><td>{text}: {value}</td></tr>
-}
-
-const Statistics = ({numGood, numNeutral, numBad, numAvg, numTotal, numPositive}) => {
-  return (
-    <div>
-      <h2>Statistics</h2>
-      <table>
-        <tbody>
-          <StatisticsLine
-            text="good"
-            value={numGood}
-          />
-          <StatisticsLine
-            text="neutral"
-            value={numNeutral}
-          />   
-          <StatisticsLine
-            text="bad"
-            value={numBad}
-          />
-          <StatisticsLine
-            text="total"
-            value={numTotal}
-          />   
-          <StatisticsLine
-            text="average"
-            value={numAvg}
-          />   
-          <StatisticsLine
-            text="% positive"
-            value={numPositive}
-          /> 
-        </tbody>
-      </table>
-    </div>
-  )
-}
+import { useState, useEffect } from 'react'
 
 const App = () => {
-  // save clicks of each button to its own state
-  const [good, setGood] = useState(0)
-  const [neutral, setNeutral] = useState(0)
-  const [bad, setBad] = useState(0)
-  const [total, setTotal] = useState(0)
-  const [average, setAverage] = useState(0)
-  const [positive, setPositive] = useState(0)
+  const anecdotes = [
+    'If it hurts, do it more often.',
+    'Adding manpower to a late software project makes it later!',
+    'The first 90 percent of the code accounts for the first 10 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.',
+    'Any fool can write code that a computer can understand. Good programmers write code that humans can understand.',
+    'Premature optimization is the root of all evil.',
+    'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.',
+    'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients.'
+  ]
+   
+  const [selected, setSelected] = useState(0)
+  const [votes, setVotes] = useState(Array(anecdotes.length).fill(0))
+  const [mostVoted, setMostVoted] = useState(0)
+
+  console.log(votes)
+  console.log(selected)
 
   useEffect(()=>{
-    let avg = 0
-    let pos = 0
-    if (total) {
-      avg = ((good-bad)/total)
-      pos = ((good/total)*100).toFixed(1)
+    if(votes[selected] > votes[mostVoted]) {
+      setMostVoted(selected)
     }
-    setAverage(avg)
-    setPositive(pos)
-  },[good,bad,neutral,total])
+  },[votes,mostVoted,selected])
 
-  const handleClick = (event) => {
-    console.log(event.target.textContent)
-    const {textContent: buttonName} = event.target
-    setTotal(prevCount => prevCount+1)
-    if (buttonName === "good") {
-      setGood(prevGood => prevGood+1)
-    } else if (buttonName === "neutral") {
-      setNeutral(prevNeutral => prevNeutral+1)
-    } else {
-      setBad(prevBad=>prevBad+1)
-    }
+  const handleClick = () => {
+    const index = Math.floor(Math.random()*anecdotes.length)
+    setSelected(index)
+  }
+
+  const handleVoteClick = () => {
+    const copy = [...votes]
+    copy[selected]+=1
+    setVotes(copy)
   }
 
   return (
     <div>
-      <Header />
-      <RatingButton 
-        onClick={handleClick}
-        text="good"
-      />
-      <RatingButton 
-        onClick={handleClick}
-        text="neutral"
-      />
-      <RatingButton 
-        onClick={handleClick}
-        text="bad"
-      />
-      {total ? <Statistics
-        numGood={good}
-        numNeutral={neutral}
-        numBad={bad}
-        numTotal={total}
-        numAvg={average}
-        numPositive={positive}
-      /> : <div><br />No feedback given.</div>}
+      <h1>Anecdote of the day</h1>
+      {anecdotes[selected]}
+      <div>has {votes[selected]} votes</div>
+      <br />
+      <button onClick={handleVoteClick}>vote</button>
+      <button onClick={handleClick}>Choose an Anecdote</button>
+      <br />
+      <h1>Anecdote with the most votes</h1>
+      {anecdotes[mostVoted]}
     </div>
   )
 }
