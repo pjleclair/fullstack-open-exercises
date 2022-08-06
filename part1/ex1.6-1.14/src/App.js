@@ -71,14 +71,14 @@ const App = () => {
       <RatingButtons 
         onClick={handleClick}
       />
-      <NumberCounter
+      {total ? <NumberCounter
         numGood={good}
         numNeutral={neutral}
         numBad={bad}
         numTotal={total}
         numAvg={average}
         numPositive={positive}
-      />
+      /> : <div></div>}
     </div>
   )
 }
