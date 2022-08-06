@@ -24,6 +24,7 @@ const App = () => {
     }
   },[votes,mostVoted,selected])
 
+  
   const handleClick = () => {
     const index = Math.floor(Math.random()*anecdotes.length)
     setSelected(index)
