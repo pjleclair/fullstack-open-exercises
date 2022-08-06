@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 const Header = () => {
   return (
@@ -6,24 +6,27 @@ const Header = () => {
   )
 }
 
-const RatingButtons = (props) => {
+const RatingButtons = ({onClick}) => {
   return (
     <div>
-      <button id="button--good" onClick={props.onClick}>good</button>
-      <button id="button--neutral" onClick={props.onClick}>neutral</button>
-      <button id="button--bad" onClick={props.onClick}>bad</button>
+      <button id="button--good" onClick={onClick}>good</button>
+      <button id="button--neutral" onClick={onClick}>neutral</button>
+      <button id="button--bad" onClick={onClick}>bad</button>
     </div>
   )
 }
 
-const NumberCounter = (props) => {
+const NumberCounter = ({numGood, numNeutral, numBad, numAvg, numTotal, numPositive}) => {
   return (
     <div>
       <h2>Statistics</h2>
       <div>
-        <div>good: {props.numGood}</div>
-        <div>neutral: {props.numNeutral}</div>
-        <div>bad: {props.numBad}</div>
+        <div>good: {numGood}</div>
+        <div>neutral: {numNeutral}</div>
+        <div>bad: {numBad}</div>
+        <div>total: {numTotal}</div>
+        <div>average: {numAvg}</div>
+        <div>% positive: {numPositive}</div>
       </div>
     </div>
   )
@@ -34,17 +37,31 @@ const App = () => {
   const [good, setGood] = useState(0)
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
+  const [total, setTotal] = useState(0)
+  const [average, setAverage] = useState(0)
+  const [positive, setPositive] = useState(0)
+
+  useEffect(()=>{
+    let avg = 0
+    let pos = 0
+    if (total) {
+      avg = ((good-bad)/total)
+      pos = (good/total)
+    }
+    setAverage(avg)
+    setPositive(pos)
+  },[good,bad,neutral,total])
 
   const handleClick = (event) => {
     console.log(event.target.id)
     const {id: buttonName} = event.target
-    console.log(buttonName)
+    setTotal(prevCount => prevCount+1)
     if (buttonName === "button--good") {
-      setGood(prevCount => prevCount+1)
+      setGood(prevGood => prevGood+1)
     } else if (buttonName === "button--neutral") {
-      setNeutral(prevCount => prevCount+1)
+      setNeutral(prevNeutral => prevNeutral+1)
     } else {
-      setBad(prevCount => prevCount+1)
+      setBad(prevBad=>prevBad+1)
     }
   }
 
@@ -58,6 +75,9 @@ const App = () => {
         numGood={good}
         numNeutral={neutral}
         numBad={bad}
+        numTotal={total}
+        numAvg={average}
+        numPositive={positive}
       />
     </div>
   )
