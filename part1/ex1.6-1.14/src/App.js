@@ -11,39 +11,41 @@ const RatingButton = ({onClick, text}) => {
 }
 
 const StatisticsLine = ({text, value}) => {
-  return <div>{text}: {value}</div>
+  return <tr><td>{text}: {value}</td></tr>
 }
 
 const Statistics = ({numGood, numNeutral, numBad, numAvg, numTotal, numPositive}) => {
   return (
     <div>
       <h2>Statistics</h2>
-      <div>
-        <StatisticsLine
-          text="good"
-          value={numGood}
-        />
-        <StatisticsLine
-          text="neutral"
-          value={numNeutral}
-        />   
-        <StatisticsLine
-          text="bad"
-          value={numBad}
-        />   
-        <StatisticsLine
-          text="total"
-          value={numTotal}
-        />   
-        <StatisticsLine
-          text="average"
-          value={numAvg}
-        />   
-        <StatisticsLine
-          text="% positive"
-          value={numPositive}
-        />
-      </div>
+      <table>
+        <tbody>
+          <StatisticsLine
+            text="good"
+            value={numGood}
+          />
+          <StatisticsLine
+            text="neutral"
+            value={numNeutral}
+          />   
+          <StatisticsLine
+            text="bad"
+            value={numBad}
+          />
+          <StatisticsLine
+            text="total"
+            value={numTotal}
+          />   
+          <StatisticsLine
+            text="average"
+            value={numAvg}
+          />   
+          <StatisticsLine
+            text="% positive"
+            value={numPositive}
+          /> 
+        </tbody>
+      </table>
     </div>
   )
 }
@@ -62,7 +64,7 @@ const App = () => {
     let pos = 0
     if (total) {
       avg = ((good-bad)/total)
-      pos = (good/total)
+      pos = ((good/total)*100).toFixed(1)
     }
     setAverage(avg)
     setPositive(pos)
