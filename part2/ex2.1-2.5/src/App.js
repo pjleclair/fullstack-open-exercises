@@ -3,10 +3,10 @@ const Course = ({course}) => {
   const sum = exArray.reduce((partialSum,a) => partialSum+a,0)
   return (
     <div>
-      <h1>Course List</h1>
+      <h1>{course.name}</h1>
       <ul>
       {course.parts.map(part =>
-        <li>{part.name} {part.exercises}</li>
+        <li key={part.id}>{part.name} {part.exercises}</li>
       )}
       </ul>
       <div>total: {sum}</div>
