@@ -1,4 +1,6 @@
 const Course = ({course}) => {
+  const exArray = course.parts.map(part => part.exercises)
+  const sum = exArray.reduce((partialSum,a) => partialSum+a,0)
   return (
     <div>
       <h1>Course List</h1>
@@ -7,6 +9,7 @@ const Course = ({course}) => {
         <li>{part.name} {part.exercises}</li>
       )}
       </ul>
+      <div>total: {sum}</div>
     </div>
   )
 }
