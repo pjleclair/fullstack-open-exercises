@@ -6,27 +6,43 @@ const Header = () => {
   )
 }
 
-const RatingButtons = ({onClick}) => {
-  return (
-    <div>
-      <button id="button--good" onClick={onClick}>good</button>
-      <button id="button--neutral" onClick={onClick}>neutral</button>
-      <button id="button--bad" onClick={onClick}>bad</button>
-    </div>
-  )
+const RatingButton = ({onClick, text}) => {
+  return <button onClick={onClick}>{text}</button>
 }
 
-const NumberCounter = ({numGood, numNeutral, numBad, numAvg, numTotal, numPositive}) => {
+const StatisticsLine = ({text, value}) => {
+  return <div>{text}: {value}</div>
+}
+
+const Statistics = ({numGood, numNeutral, numBad, numAvg, numTotal, numPositive}) => {
   return (
     <div>
       <h2>Statistics</h2>
       <div>
-        <div>good: {numGood}</div>
-        <div>neutral: {numNeutral}</div>
-        <div>bad: {numBad}</div>
-        <div>total: {numTotal}</div>
-        <div>average: {numAvg}</div>
-        <div>% positive: {numPositive}</div>
+        <StatisticsLine
+          text="good"
+          value={numGood}
+        />
+        <StatisticsLine
+          text="neutral"
+          value={numNeutral}
+        />   
+        <StatisticsLine
+          text="bad"
+          value={numBad}
+        />   
+        <StatisticsLine
+          text="total"
+          value={numTotal}
+        />   
+        <StatisticsLine
+          text="average"
+          value={numAvg}
+        />   
+        <StatisticsLine
+          text="% positive"
+          value={numPositive}
+        />
       </div>
     </div>
   )
@@ -53,12 +69,12 @@ const App = () => {
   },[good,bad,neutral,total])
 
   const handleClick = (event) => {
-    console.log(event.target.id)
-    const {id: buttonName} = event.target
+    console.log(event.target.textContent)
+    const {textContent: buttonName} = event.target
     setTotal(prevCount => prevCount+1)
-    if (buttonName === "button--good") {
+    if (buttonName === "good") {
       setGood(prevGood => prevGood+1)
-    } else if (buttonName === "button--neutral") {
+    } else if (buttonName === "neutral") {
       setNeutral(prevNeutral => prevNeutral+1)
     } else {
       setBad(prevBad=>prevBad+1)
@@ -68,17 +84,26 @@ const App = () => {
   return (
     <div>
       <Header />
-      <RatingButtons 
+      <RatingButton 
         onClick={handleClick}
+        text="good"
       />
-      {total ? <NumberCounter
+      <RatingButton 
+        onClick={handleClick}
+        text="neutral"
+      />
+      <RatingButton 
+        onClick={handleClick}
+        text="bad"
+      />
+      {total ? <Statistics
         numGood={good}
         numNeutral={neutral}
         numBad={bad}
         numTotal={total}
         numAvg={average}
         numPositive={positive}
-      /> : <div></div>}
+      /> : <div><br />No feedback given.</div>}
     </div>
   )
 }
