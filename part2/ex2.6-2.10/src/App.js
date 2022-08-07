@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 
 const Numbers = (props) => {
-  const newArray = props.numArray.map((num,i) => 
+  const newArray = props.numArray.map(num => 
     <div key={num.name}>{num.name}: {num.num}</div>
   )
   return (
     <div>
-      {newArray}
+      {props.searchFilters !== '' ? newArray.filter(name => name.key.toLowerCase().includes(props.searchFilters)) : newArray}
     </div>
   )
 }
@@ -19,6 +19,7 @@ const App = () => {
   ]) 
   const [newName, setNewName] = useState('')
   const [newNum, setNewNum] = useState('')
+  const [newSearch, setNewSearch] = useState('')
 
   const handleSubmit = (event) => {
     event.preventDefault()
@@ -36,10 +37,18 @@ const App = () => {
     event.target.id === 'name' ? setNewName(event.target.value) : setNewNum(event.target.value)
   }
 
+  const handleSearch = (event) => {
+    setNewSearch(event.target.value)
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
       <form onSubmit={handleSubmit}>
+        <div>
+          search the listings: <input onInput={handleSearch}/>
+        </div>
+        <h1>add an entry:</h1>
         <div>
           name: <input id='name' onInput={handleInput}/>
         </div>
@@ -53,6 +62,7 @@ const App = () => {
       <h1>Numbers</h1>
       <Numbers 
         numArray={persons}
+        searchFilters={newSearch}
       />
     </div>
   )
