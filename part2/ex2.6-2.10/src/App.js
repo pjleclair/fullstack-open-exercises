@@ -2,9 +2,8 @@ import React, { useState } from 'react'
 
 const Numbers = (props) => {
   const newArray = props.numArray.map((num,i) => 
-    <div key={i}>{num.name}</div>
+    <div key={num.name}>{num.name}</div>
   )
-  console.log(newArray)
   return (
     <div>
       {newArray}
@@ -20,7 +19,10 @@ const App = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault()
-    console.log(event)
+    
+    persons.find(name => 
+      name.name === newName
+    ) !== undefined ? alert(`${newName} is already in the phonebook!`) :
     setPersons(prevState => [
       ...prevState,
       {name: newName}
