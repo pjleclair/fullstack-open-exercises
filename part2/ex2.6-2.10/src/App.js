@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 const Numbers = (props) => {
   const newArray = props.numArray.map((num,i) => 
-    <div key={num.name}>{num.name}</div>
+    <div key={num.name}>{num.name}: {num.num}</div>
   )
   return (
     <div>
@@ -13,9 +13,12 @@ const Numbers = (props) => {
 
 const App = () => {
   const [persons, setPersons] = useState([
-    { name: 'Arto Hellas' }
+    { name: 'Arto Hellas', num: '999-999-9999' },
+    {name: 'Joseph Shmoe', num: '207-888-8222'},
+    {name: 'Phil LeClair', num: '207-555-2222'}
   ]) 
   const [newName, setNewName] = useState('')
+  const [newNum, setNewNum] = useState('')
 
   const handleSubmit = (event) => {
     event.preventDefault()
@@ -25,12 +28,12 @@ const App = () => {
     ) !== undefined ? alert(`${newName} is already in the phonebook!`) :
     setPersons(prevState => [
       ...prevState,
-      {name: newName}
+      {name: newName, num: newNum}
     ])
   }
 
   const handleInput = (event) => {
-    setNewName(event.target.value)
+    event.target.id === 'name' ? setNewName(event.target.value) : setNewNum(event.target.value)
   }
 
   return (
@@ -38,7 +41,10 @@ const App = () => {
       <h2>Phonebook</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          name: <input onInput={handleInput}/>
+          name: <input id='name' onInput={handleInput}/>
+        </div>
+        <div>
+          number: <input id='number' onInput={handleInput}/>
         </div>
         <div>
           <button type="submit">add</button>
