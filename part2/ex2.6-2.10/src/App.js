@@ -1,12 +1,41 @@
 import React, { useState } from 'react'
 
+const SearchFunction = (props) => {
+  return (
+    <div>
+      <h2>Phonebook</h2>
+        <div>
+          search the listings: <input onInput={props.onInput}/>
+        </div>
+    </div>
+  )
+}
+
+const AddEntry = (props) => {
+  return (
+    <form onSubmit={props.onSubmit}>
+      <h1>add an entry:</h1>
+      <div>
+        name: <input id='name' onInput={props.onInput}/>
+      </div>
+      <div>
+        number: <input id='number' onInput={props.onInput}/>
+      </div>
+      <div>
+        <button type="submit">add</button>
+      </div>
+    </form>
+  )
+}
+
 const Numbers = (props) => {
   const newArray = props.numArray.map(num => 
     <div key={num.name}>{num.name}: {num.num}</div>
   )
   return (
     <div>
-      {props.searchFilters !== '' ? newArray.filter(name => name.key.toLowerCase().includes(props.searchFilters)) : newArray}
+     <h1>Numbers</h1>
+      {props.searchFilters !== '' ? newArray.filter(name => name.key.toLowerCase().includes(props.searchFilters.toLowerCase())) : newArray}
     </div>
   )
 }
@@ -23,7 +52,6 @@ const App = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault()
-    
     persons.find(name => 
       name.name === newName
     ) !== undefined ? alert(`${newName} is already in the phonebook!`) :
@@ -43,23 +71,13 @@ const App = () => {
 
   return (
     <div>
-      <h2>Phonebook</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          search the listings: <input onInput={handleSearch}/>
-        </div>
-        <h1>add an entry:</h1>
-        <div>
-          name: <input id='name' onInput={handleInput}/>
-        </div>
-        <div>
-          number: <input id='number' onInput={handleInput}/>
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
-      <h1>Numbers</h1>
+      <SearchFunction 
+        onInput={handleSearch}
+      />
+      <AddEntry 
+        onInput={handleInput}
+        onSubmit={handleSubmit}
+      /> 
       <Numbers 
         numArray={persons}
         searchFilters={newSearch}
