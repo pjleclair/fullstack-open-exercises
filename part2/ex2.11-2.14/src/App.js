@@ -4,7 +4,7 @@ import axios from 'axios'
 const SearchFunction = (props) => {
   return (
     <div>
-      <h2>Phonebook</h2>
+      <h1>Countries</h1>
         <div>
           search the listings: <input onInput={props.onInput}/>
         </div>
@@ -12,65 +12,72 @@ const SearchFunction = (props) => {
   )
 }
 
-const AddEntry = (props) => {
-  return (
-    <form onSubmit={props.onSubmit}>
-      <h1>add an entry:</h1>
-      <div>
-        name: <input id='name' onInput={props.onInput}/>
-      </div>
-      <div>
-        number: <input id='number' onInput={props.onInput}/>
-      </div>
-      <div>
-        <button type="submit">add</button>
-      </div>
-    </form>
-  )
+const Entries = (props) => {
+  let newCountryArray
+  let countryForRender
+  let countryForRenderLangs
+  if (props.countryArray.length === 1) {
+    countryForRender = props.countryData.find(country => 
+    country.name.common.toLowerCase().includes(props.countryArray[0].key.toLowerCase()))
+    console.log(Object.values(countryForRender.languages))
+    countryForRenderLangs = Object.values(countryForRender.languages).map((lang,i) =>
+        <li key={i}>{lang}</li>
+    )
 }
-
-const Numbers = (props) => {
-  const newArray = props.numArray.map(num => 
-    <div key={num.name}>{num.name}: {num.number}</div>
-  )
+  props.countryArray.length === 1 ? 
+  newCountryArray = <div>
+    <h1>{props.countryArray[0]}</h1>
+    <div>capital: {countryForRender.capital[0]}</div>
+    <div>area: {countryForRender.area}</div>
+    <br />
+    <div>
+      languages: <ul>{countryForRenderLangs}</ul>
+    </div>
+    <img src={countryForRender.flags.svg} style={{width:'100px'}} alt='flag'/>
+  </div> : 
+  newCountryArray = <div>
+    <h2>Listings</h2>
+    {props.countryArray}
+ </div>
   return (
     <div>
-     <h1>Numbers</h1>
-      {props.searchFilters !== '' ? newArray.filter(name => name.key.toLowerCase().includes(props.searchFilters.toLowerCase())) : newArray}
+      {newCountryArray}
     </div>
   )
 }
 
 const App = () => {
-  const [persons, setPersons] = useState([]) 
-  const [newName, setNewName] = useState('')
-  const [newNum, setNewNum] = useState('')
+  const [countries, setCountries] = useState([]) 
+  const [filteredCountries, setFilteredCountries] = useState([])
   const [newSearch, setNewSearch] = useState('')
 
   const Hook = () => {
     axios
-      .get('http://localhost:3001/persons')
+      .get('https://restcountries.com/v3.1/all')
       .then(response => {
-        setPersons(response.data)
+        const countryList = response.data
+        const elementList = countryList.map(country => 
+        <div key={country.name.common}>{country.name.common}</div>
+        )
+        setCountries(countryList)
+        setFilteredCountries(elementList)
     })
+  }
+  const SearchHook = () => {
+    const countryList = countries.map(country => 
+      <div key={country.name.common}>{country.name.common}</div>
+      )
+    const filteredArray = countryList.filter(name => {
+      return (
+      name.key.toLowerCase().includes(
+        newSearch.toLowerCase()
+      ))})
+      console.log(filteredArray)
+      setFilteredCountries(filteredArray)
   }
 
   React.useEffect(Hook,[])
-
-  const handleSubmit = (event) => {
-    event.preventDefault()
-    persons.find(name => 
-      name.name === newName
-    ) !== undefined ? alert(`${newName} is already in the phonebook!`) :
-    setPersons(prevState => [
-      ...prevState,
-      {name: newName, number: newNum}
-    ])
-  }
-
-  const handleInput = (event) => {
-    event.target.id === 'name' ? setNewName(event.target.value) : setNewNum(event.target.value)
-  }
+  React.useEffect(SearchHook,[newSearch, countries])
 
   const handleSearch = (event) => {
     setNewSearch(event.target.value)
@@ -81,14 +88,13 @@ const App = () => {
       <SearchFunction 
         onInput={handleSearch}
       />
-      <AddEntry 
-        onInput={handleInput}
-        onSubmit={handleSubmit}
-      /> 
-      <Numbers 
-        numArray={persons}
-        searchFilters={newSearch}
-      />
+      {(filteredCountries.length) > 10 && (filteredCountries.length !== countries.length) ? 
+      <div>Too many matches, specify another filter.</div> : 
+        <Entries 
+          countryArray={filteredCountries}
+          countryData={countries}
+        />
+      }
     </div>
   )
 }
