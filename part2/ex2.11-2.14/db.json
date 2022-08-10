@@ -1,24 +1,47 @@
 {
-    "persons":[
-      { 
-        "name": "Arto Hellas", 
-        "number": "040-123456",
-        "id": 1
-      },
-      { 
-        "name": "Ada Lovelace", 
-        "number": "39-44-5323523",
-        "id": 2
-      },
-      { 
-        "name": "Dan Abramov", 
-        "number": "12-43-234345",
-        "id": 3
-      },
-      { 
-        "name": "Mary Poppendieck", 
-        "number": "39-23-6423122",
-        "id": 4
-      }
-    ]
-  }
+  "data": {  
+        "coord": {
+        "lon": 13.4105,
+        "lat": 52.5244
+        },
+        "weather": [
+        {
+            "id": 800,
+            "main": "Clear",
+            "description": "clear sky",
+            "icon": "01d"
+        }
+        ],
+        "base": "stations",
+        "main": {
+        "temp": 302.16,
+        "feels_like": 301.09,
+        "temp_min": 300.92,
+        "temp_max": 304.3,
+        "pressure": 1024,
+        "humidity": 31
+        },
+        "visibility": 10000,
+        "wind": {
+        "speed": 3.13,
+        "deg": 346,
+        "gust": 6.26
+        },
+        "clouds": {
+        "all": 0
+        },
+        "dt": 1660139460,
+        "sys": {
+        "type": 2,
+        "id": 2011538,
+        "country": "DE",
+        "sunrise": 1660102819,
+        "sunset": 1660156997
+        },
+        "timezone": 7200,
+        "id": 2950159,
+        "name": "Berlin",
+        "cod": 200
+    }
+}
+
