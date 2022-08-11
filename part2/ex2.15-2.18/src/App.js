@@ -43,7 +43,8 @@ const Numbers = (props) => {
 }
 
 const App = () => {
-  const [persons, setPersons] = useState([]) 
+  const [persons, setPersons] = useState([])
+  const [data, setData] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNum, setNewNum] = useState('')
   const [newSearch, setNewSearch] = useState('')
@@ -52,13 +53,12 @@ const App = () => {
     entryService
       .getAll()
       .then(response => {
-        console.log(response.data)
-        if (response.data.length !== persons.length)
-          {setPersons(response.data)}
+        const initialData = response.data
+        setPersons(initialData)
       })
   }
 
-  React.useEffect(dataHook, [persons])
+  React.useEffect(dataHook, [data])
 
   const handleSubmit = (event) => {
 
@@ -72,7 +72,11 @@ const App = () => {
         .update(idToUpdate,{name:newName,num:newNum})
         entryService
         .getAll()
-        .then(response => setPersons(response.data))
+        .then(response => {
+          const newData = response.data
+          setData(newData)
+          }
+        )
       }
     }
 
@@ -85,7 +89,11 @@ const App = () => {
       .create({name: newName, num: newNum})
       .then(response => {
         console.log(response)
+        setData(response.data)
       })
+
+    setNewName('')
+    setNewNum('')
   }
 
   const handleClick = (event) => {
@@ -96,8 +104,8 @@ const App = () => {
       entryService
       .getAll()
       .then(response => {
-        console.log(response.data)
-        setPersons(response.data)
+        const newData = response.data
+        setData(newData)
       })
     }
   }
