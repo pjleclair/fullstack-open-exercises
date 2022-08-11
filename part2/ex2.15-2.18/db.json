@@ -9,16 +9,6 @@
       "id": 2,
       "name": "Joseph Shmoe",
       "num": "207-888-8222"
-    },
-    {
-      "name": "Phil LeClair",
-      "num": "207-777-7777",
-      "id": 3
-    },
-    {
-      "name": "test",
-      "num": "207",
-      "id": 4
     }
   ]
 }

@@ -13,9 +13,14 @@ const SearchFunction = (props) => {
 }
 
 const AddEntry = (props) => {
+  let styles = {}
+  props.notificationMsg === 'Error!' ?
+  styles = {color:'red'} : styles = {color:'green'}
   return (
     <form onSubmit={props.onSubmit}>
       <h1>add an entry:</h1>
+      <div style={styles}>{props.notificationMsg}</div>
+      <br />
       <div>
         name: <input id='name' name={props.name} value={props.valueName} onInput={props.onInput}/>
       </div>
@@ -48,6 +53,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNum, setNewNum] = useState('')
   const [newSearch, setNewSearch] = useState('')
+  const [notificationMsg, setNotificationMsg] = useState('')
 
   const dataHook = () => {
     entryService
@@ -70,13 +76,28 @@ const App = () => {
         }).id
         entryService
         .update(idToUpdate,{name:newName,num:newNum})
+        .catch(error => {
+          setNotificationMsg('Error!')
+          setTimeout(() => {
+            setNotificationMsg('')
+          }, 5000)
+        })
         entryService
         .getAll()
         .then(response => {
           const newData = response.data
           setData(newData)
-          }
-        )
+          setNotificationMsg('Updated!')
+          setTimeout(() => {
+            setNotificationMsg('')
+          }, 5000)
+        })
+        .catch(error => {
+          setNotificationMsg('Error!')
+          setTimeout(() => {
+            setNotificationMsg('')
+          }, 5000)
+        })
       }
     }
 
@@ -90,6 +111,16 @@ const App = () => {
       .then(response => {
         console.log(response)
         setData(response.data)
+        setNotificationMsg('Added!')
+        setTimeout(() => {
+          setNotificationMsg('')
+        }, 5000)
+      })
+      .catch(error => {
+        setNotificationMsg('Error!')
+        setTimeout(() => {
+          setNotificationMsg('')
+        }, 5000)
       })
 
     setNewName('')
@@ -106,6 +137,12 @@ const App = () => {
       .then(response => {
         const newData = response.data
         setData(newData)
+      })
+      .catch(error => {
+        setNotificationMsg('Error!')
+        setTimeout(() => {
+          setNotificationMsg('')
+        }, 5000)
       })
     }
   }
@@ -124,6 +161,7 @@ const App = () => {
         onInput={handleSearch}
       />
       <AddEntry 
+        notificationMsg={notificationMsg}
         onInput={handleInput}
         onSubmit={handleSubmit}
         name={newName}
