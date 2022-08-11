@@ -61,17 +61,28 @@ const App = () => {
   React.useEffect(dataHook, [persons])
 
   const handleSubmit = (event) => {
+
+    const confirmUpdate = (newName,newNum,persons) => {
+      if (window.confirm(`${newName} is already in the phonebook! Would you like to update the number?`))
+      {
+        const idToUpdate = persons.find(person => {
+          return person.name === newName
+        }).id
+        entryService
+        .update(idToUpdate,{name:newName,num:newNum})
+        entryService
+        .getAll()
+        .then(response => setPersons(response.data))
+      }
+    }
+
     event.preventDefault()
     persons.find(name => 
-      name.name === newName
-    ) !== undefined ? alert(`${newName} is already in the phonebook!`) :
-    setPersons(prevState => [
-      ...prevState,
-      {name: newName, num: newNum}
-    ])
-    const newPerson = {name: newName, num: newNum}
-    entryService
-      .create(newPerson)
+      ((name.name === newName))
+    ) !== undefined ?
+      confirmUpdate(newName,newNum,persons)
+    : entryService
+      .create({name: newName, num: newNum})
       .then(response => {
         console.log(response)
       })
