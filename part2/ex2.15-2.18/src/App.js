@@ -31,8 +31,9 @@ const AddEntry = (props) => {
 
 const Numbers = (props) => {
   const newArray = props.numArray.map(num => 
-    <div key={num.name}>{num.name}: {num.num}</div>
+    <div key={num.name}>{num.name}: {num.num} <button className={num.name} id={num.id} onClick={props.onClick}>Delete</button></div>
   )
+
   return (
     <div>
      <h1>Numbers</h1>
@@ -52,11 +53,12 @@ const App = () => {
       .getAll()
       .then(response => {
         console.log(response.data)
-        setPersons(response.data)
+        if (response.data.length !== persons.length)
+          {setPersons(response.data)}
       })
   }
 
-  React.useEffect(dataHook, [])
+  React.useEffect(dataHook, [persons])
 
   const handleSubmit = (event) => {
     event.preventDefault()
@@ -73,6 +75,20 @@ const App = () => {
       .then(response => {
         console.log(response)
       })
+  }
+
+  const handleClick = (event) => {
+    if(window.confirm(`Are you sure you want to delete ${event.target.className}?`))
+    {
+      entryService
+      .del(event.target.id)
+      entryService
+      .getAll()
+      .then(response => {
+        console.log(response.data)
+        setPersons(response.data)
+      })
+    }
   }
 
   const handleInput = (event) => {
@@ -95,6 +111,7 @@ const App = () => {
       <Numbers 
         numArray={persons}
         searchFilters={newSearch}
+        onClick={(event) => handleClick(event)}
       />
     </div>
   )
