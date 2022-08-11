@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import axios from 'axios'
+import entryService from './services/entries'
 
 const SearchFunction = (props) => {
   return (
@@ -48,8 +48,8 @@ const App = () => {
   const [newSearch, setNewSearch] = useState('')
 
   const dataHook = () => {
-    axios
-      .get('http://localhost:3001/data')
+    entryService
+      .getAll()
       .then(response => {
         console.log(response.data)
         setPersons(response.data)
@@ -68,8 +68,8 @@ const App = () => {
       {name: newName, num: newNum}
     ])
     const newPerson = {name: newName, num: newNum}
-    axios
-      .post('http://localhost:3001/data', newPerson)
+    entryService
+      .create(newPerson)
       .then(response => {
         console.log(response)
       })
