@@ -17,10 +17,10 @@ const AddEntry = (props) => {
     <form onSubmit={props.onSubmit}>
       <h1>add an entry:</h1>
       <div>
-        name: <input id='name' onInput={props.onInput}/>
+        name: <input id='name' name={props.name} value={props.valueName} onInput={props.onInput}/>
       </div>
       <div>
-        number: <input id='number' onInput={props.onInput}/>
+        number: <input id='number' name={props.num} value={props.valueNum} onInput={props.onInput}/>
       </div>
       <div>
         <button type="submit">add</button>
@@ -126,6 +126,10 @@ const App = () => {
       <AddEntry 
         onInput={handleInput}
         onSubmit={handleSubmit}
+        name={newName}
+        valueName={newName}
+        num={newNum}
+        valueNum={newNum}
       /> 
       <Numbers 
         numArray={persons}
