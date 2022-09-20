@@ -36,7 +36,7 @@ const AddEntry = (props) => {
 
 const Numbers = (props) => {
   const newArray = props.numArray.map(num => 
-    <div key={num.name}>{num.name}: {num.num} <button className={num.name} id={num.id} onClick={props.onClick}>Delete</button></div>
+    <div key={num.name}>{num.name}: {num.number} <button className={num.name} id={num.id} onClick={props.onClick}>Delete</button></div>
   )
 
   return (
@@ -60,6 +60,7 @@ const App = () => {
       .getAll()
       .then(response => {
         const initialData = response.data
+        console.log(response.data)
         setPersons(initialData)
       })
   }
@@ -74,8 +75,9 @@ const App = () => {
         const idToUpdate = persons.find(person => {
           return person.name === newName
         }).id
+        console.log(idToUpdate)
         entryService
-        .update(idToUpdate,{name:newName,num:newNum})
+        .update(idToUpdate,{name:newName,number:newNum})
         .catch(error => {
           setNotificationMsg('Error!')
           setTimeout(() => {
@@ -107,7 +109,7 @@ const App = () => {
     ) !== undefined ?
       confirmUpdate(newName,newNum,persons)
     : entryService
-      .create({name: newName, num: newNum})
+      .create({name: newName, number: newNum})
       .then(response => {
         console.log(response)
         setData(response.data)

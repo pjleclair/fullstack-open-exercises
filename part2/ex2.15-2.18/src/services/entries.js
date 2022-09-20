@@ -1,5 +1,5 @@
 import axios from 'axios'
-const baseUrl = 'http://localhost:3001/data'
+const baseUrl = 'https://agile-sierra-56026.herokuapp.com/api/persons'
 
 const getAll = () => {
     return axios.get(baseUrl)
