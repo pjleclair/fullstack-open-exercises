@@ -13,8 +13,8 @@ const SearchFunction = (props) => {
 }
 
 const AddEntry = (props) => {
-  let styles = {}
-  props.notificationMsg === 'Error!' ?
+  let styles
+  props.notificationMsgType === 'error' ?
   styles = {color:'red'} : styles = {color:'green'}
   return (
     <form onSubmit={props.onSubmit}>
@@ -54,6 +54,7 @@ const App = () => {
   const [newNum, setNewNum] = useState('')
   const [newSearch, setNewSearch] = useState('')
   const [notificationMsg, setNotificationMsg] = useState('')
+  const [notificationMsgType, setNotificationMsgType] = useState('')
 
   const dataHook = () => {
     entryService
@@ -81,6 +82,7 @@ const App = () => {
         .update(idToUpdate,{name:newName,number:newNum})
         .catch(error => {
           setNotificationMsg('Error!')
+          setNotificationMsgType('error')
           setTimeout(() => {
             setNotificationMsg('')
           }, 5000)
@@ -91,12 +93,14 @@ const App = () => {
           const newData = response.data
           setData(newData)
           setNotificationMsg('Updated!')
+          setNotificationMsgType('success')
           setTimeout(() => {
             setNotificationMsg('')
           }, 5000)
         })
         .catch(error => {
           setNotificationMsg('Error!')
+          setNotificationMsgType('error')
           setTimeout(() => {
             setNotificationMsg('')
           }, 5000)
@@ -115,12 +119,14 @@ const App = () => {
         console.log(response)
         setData(response.data)
         setNotificationMsg('Added!')
+        setNotificationMsgType('success')
         setTimeout(() => {
           setNotificationMsg('')
         }, 5000)
       })
       .catch(error => {
-        setNotificationMsg('Error!')
+        setNotificationMsg(error.response.data.error)
+        setNotificationMsgType('error')
         setTimeout(() => {
           setNotificationMsg('')
         }, 5000)
@@ -143,6 +149,7 @@ const App = () => {
       })
       .catch(error => {
         setNotificationMsg('Error!')
+        setNotificationMsgType('error')
         setTimeout(() => {
           setNotificationMsg('')
         }, 5000)
@@ -165,6 +172,7 @@ const App = () => {
       />
       <AddEntry 
         notificationMsg={notificationMsg}
+        notificationMsgType={notificationMsgType}
         onInput={handleInput}
         onSubmit={handleSubmit}
         name={newName}
