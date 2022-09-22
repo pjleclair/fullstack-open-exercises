@@ -73,7 +73,8 @@ const App = () => {
       if (window.confirm(`${newName} is already in the phonebook! Would you like to update the number?`))
       {
         const idToUpdate = persons.find(person => {
-          return person.name === newName
+          console.log(person.name)
+          return person.name.toLowerCase() === newName.toLowerCase()
         }).id
         console.log(idToUpdate)
         entryService
