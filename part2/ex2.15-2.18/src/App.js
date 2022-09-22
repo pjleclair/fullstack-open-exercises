@@ -105,7 +105,7 @@ const App = () => {
 
     event.preventDefault()
     persons.find(name => 
-      ((name.name === newName))
+      ((name.name.toLowerCase() === newName.toLowerCase))
     ) !== undefined ?
       confirmUpdate(newName,newNum,persons)
     : entryService
